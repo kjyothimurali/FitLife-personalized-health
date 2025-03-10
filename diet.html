@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitamin Food Info</title>
+    <style>
+        /* Global styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #f8f9fa, #e2e6ea);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+            text-align: center;
+        }
+
+        /* Container styling */
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 450px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Input section */
+        .input-section {
+            margin-bottom: 20px;
+        }
+
+        input {
+            padding: 12px;
+            width: calc(100% - 24px);
+            margin-top: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #3da728;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #4faa43;
+        }
+
+        /* Result section */
+        .result {
+            margin-top: 20px;
+            display: none;
+            text-align: left;
+            font-size: 16px;
+            word-break: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Vitamin Food Information</h1>
+
+        <div class="input-section">
+            <label for="vitamin">Enter Vitamin (e.g., Vitamin A, Vitamin C, etc.):</label>
+            <input type="text" id="vitamin" placeholder="Vitamin Name" required>
+            <button onclick="getVitaminInfo()">Get Info</button>
+        </div>
+
+        <div id="result" class="result">
+            <!-- Result will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        const foodInfo = {
+            "Vitamin A": [
+                { name: "Carrots", calories: 41 },
+                { name: "Sweet Potatoes", calories: 86 },
+                { name: "Spinach", calories: 23 }
+            ],
+            "Vitamin C": [
+                { name: "Oranges", calories: 62 },
+                { name: "Strawberries", calories: 32 },
+                { name: "Bell Peppers", calories: 31 }
+            ],
+            "Vitamin D": [
+                { name: "Salmon", calories: 208 },
+                { name: "Egg Yolk", calories: 55 },
+                { name: "Fortified Milk", calories: 103 }
+            ],
+            "Vitamin E": [
+                { name: "Almonds", calories: 575 },
+                { name: "Spinach", calories: 23 },
+                { name: "Avocado", calories: 160 }
+            ],
+            "Vitamin K": [
+                { name: "Kale", calories: 33 },
+                { name: "Broccoli", calories: 55 },
+                { name: "Brussels Sprouts", calories: 43 }
+            ],
+            "Vitamin B1": [
+                { name: "Sunflower Seeds (100g)", calories: 584 },
+                { name: "Pork (100g)", calories: 242 },
+                { name: "Brown Rice (100g)", calories: 111 }
+            ],
+            "Vitamin B2": [
+                { name: "Milk (100g)", calories: 42 },
+                { name: "Eggs (100g)", calories: 155 },
+                { name: "Almonds (100g)", calories: 575 }
+            ],
+            "Vitamin B3": [
+                { name: "Chicken Breast (100g)", calories: 165 },
+                { name: "Tuna (100g)", calories: 144 },
+                { name: "Peanuts (100g)", calories: 567 }
+            ],
+            "Vitamin B5": [
+                { name: "Avocado (100g)", calories: 160 },
+                { name: "Sunflower Seeds (100g)", calories: 584 },
+                { name: "Mushrooms (100g)", calories: 22 }
+            ],
+            "Vitamin B6": [
+                { name: "Bananas (100g)", calories: 89 },
+                { name: "Salmon (100g)", calories: 208 },
+                { name: "Potatoes (100g)", calories: 77 }
+            ],
+            "Vitamin B7": [
+                { name: "Egg Yolk", calories: 55 },
+                { name: "Nuts (almonds, walnuts)", calories: 575 },
+                { name: "Sweet Potatoes", calories: 86 }
+            ],
+            "Vitamin B9": [
+                { name: "Spinach (100g)", calories: 23 },
+                { name: "Lentils (100g)", calories: 116 },
+                { name: "Asparagus (100g)", calories: 20 }
+            ],
+            "Vitamin B12": [
+                { name: "Clams (100g)", calories: 99 },
+                { name: "Beef Liver (100g)", calories: 135 },
+                { name: "Sardines (100g)", calories: 208 }
+            ]
+        };
+
+        function getVitaminInfo() {
+            const vitaminInput = document.getElementById('vitamin').value.trim().toLowerCase();
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'none'; // Hide previous results
+
+            if (vitaminInput === "") {
+                alert("Please enter a vitamin name.");
+                return;
+            }
+
+            let vitaminKey = Object.keys(foodInfo).find(vit => vit.toLowerCase() === vitaminInput);
+
+            if (vitaminKey) {
+                let foodItems = foodInfo[vitaminKey];
+                let resultHTML = `<h3>Food Sources for ${vitaminKey}</h3>`;
+                foodItems.forEach(item => {
+                    const caloriesBurned = Math.round(item.calories * 0.1); // Assume 10% of calories need to be burned by exercise
+                    resultHTML += `
+                        <p><strong>${item.name}</strong>: ${item.calories} calories. You need to burn about ${caloriesBurned} calories after consuming it.</p>
+                    `;
+                });
+                resultDiv.innerHTML = resultHTML;
+                resultDiv.style.display = 'block'; // Show result
+            } else {
+                resultDiv.innerHTML = `<p>No information found for the vitamin "${vitaminInput}". Please try another one.</p>`;
+                resultDiv.style.display = 'block'; // Show result
+            }
+        }
+    </script>
+</body>
+</html>

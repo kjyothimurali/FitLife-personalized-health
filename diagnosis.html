@@ -1,0 +1,326 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Metrics and Disease Prediction</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-image: url('https://static.vecteezy.com/system/resources/previews/021/925/236/non_2x/world-health-day-stethoscopes-with-3d-heart-generative-ai-photo.jpg');
+        }
+
+        header {
+            background-color: #a43d9f;
+            color: white;
+            padding: 25px 0;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        main {
+            padding: 30px;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        form {
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #a43d9f;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            color: #333;
+            margin-top: 8px;
+            box-sizing: border-box;
+        }
+
+        input:focus, select:focus {
+            border-color: #a43d9f;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #a43d9f;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #9b329e;
+        }
+
+        .output {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .reference-guide {
+            margin-top: 50px;
+            padding: 25px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .reference-guide h2 {
+            text-align: center;
+            color: #a43d9f;
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            color: #a43d9f;
+            font-size: 20px;
+        }
+
+        .card p {
+            font-size: 16px;
+            color: #666;
+        }
+
+        footer {
+            background-color: #9c4bd3;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            margin-top: 50px;
+            font-size: 14px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 24px;
+            }
+
+            main {
+                padding: 15px;
+            }
+
+            .card {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Health Metrics & Disease Prediction</h1>
+    </header>
+
+    <main>
+        <section id="health-form">
+            <form id="healthForm">
+                <h2>Enter Your Health Metrics</h2>
+
+                <div class="form-group">
+                    <label for="gender">Gender:</label>
+                    <select id="gender" required>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="height">Height (cm):</label>
+                    <input type="number" id="height" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="weight">Weight (kg):</label>
+                    <input type="number" id="weight" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="cholesterol">Cholesterol (mg/dL):</label>
+                    <input type="number" id="cholesterol" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="bpSystolic">Systolic BP (mmHg):</label>
+                    <input type="number" id="bpSystolic" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="bpDiastolic">Diastolic BP (mmHg):</label>
+                    <input type="number" id="bpDiastolic" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="oxygenSaturation">Oxygen Saturation (%):</label>
+                    <input type="number" id="oxygenSaturation" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="wbcCount">WBC Count (cells/µL):</label>
+                    <input type="number" id="wbcCount" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="heartRate">Heart Rate (bpm):</label>
+                    <input type="number" id="heartRate" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="bodyTemperature">Body Temperature (°C):</label>
+                    <input type="number" id="bodyTemperature" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="bloodSugar">Blood Sugar (mg/dL):</label>
+                    <input type="number" id="bloodSugar" required>
+                </div>
+
+                <button type="button" onclick="checkHealth()">Check Health</button>
+            </form>
+        </section>
+
+        <!-- Output -->
+        <div id="output" class="output">
+            <h3>Possible Disease</h3>
+            <div id="diseaseResult"></div>
+        </div>
+
+        <!-- Reference Guide -->
+        <section class="reference-guide">
+            <h2>Health Metrics Reference Guide</h2>
+
+            <div class="card">
+                <h3>Blood Pressure</h3>
+                <p>Normal: 120/80 mmHg</p>
+                <p>High: Above 140/90 mmHg</p>
+            </div>
+
+            <div class="card">
+                <h3>Heart Rate</h3>
+                <p>Normal: 60–100 bpm</p>
+                <p>Bradycardia: Below 60 bpm</p>
+                <p>Tachycardia: Above 100 bpm</p>
+            </div>
+
+            <div class="card">
+                <h3>Oxygen Saturation</h3>
+                <p>Normal: 95–100%</p>
+                <p>Low: Below 90%</p>
+            </div>
+
+            <div class="card">
+                <h3>Body Temperature</h3>
+                <p>Normal: 36.1–37.2°C</p>
+                <p>Fever: Above 38°C</p>
+            </div>
+
+            <div class="card">
+                <h3>Cholesterol</h3>
+                <p>Normal: Below 200 mg/dL</p>
+                <p>High: Above 240 mg/dL</p>
+            </div>
+
+            <div class="card">
+                <h3>WBC Count</h3>
+                <p>Normal: 4,000–11,000 cells/µL</p>
+                <p>Low: Below 4,000 cells/µL</p>
+                <p>High: Above 11,000 cells/µL</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Health Tracker. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function checkHealth() {
+            // Get values from the form
+            const gender = document.getElementById('gender').value;
+            const height = parseInt(document.getElementById('height').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const cholesterol = parseInt(document.getElementById('cholesterol').value);
+            const bpSystolic = parseInt(document.getElementById('bpSystolic').value);
+            const bpDiastolic = parseInt(document.getElementById('bpDiastolic').value);
+            const oxygenSaturation = parseInt(document.getElementById('oxygenSaturation').value);
+            const wbcCount = parseInt(document.getElementById('wbcCount').value);
+            const heartRate = parseInt(document.getElementById('heartRate').value);
+            const bodyTemperature = parseFloat(document.getElementById('bodyTemperature').value);
+            const bloodSugar = parseInt(document.getElementById('bloodSugar').value);
+
+            // Simple disease prediction logic based on entered values
+            let diseasePrediction = "No disease detected. Please consult a doctor for further diagnosis.";
+
+            // Example conditions for prediction
+            if (bpSystolic > 140 || bpDiastolic > 90) {
+                diseasePrediction = "High Blood Pressure (Hypertension) detected.";
+            } else if (cholesterol > 240) {
+                diseasePrediction = "High Cholesterol detected.";
+            } else if (heartRate > 100) {
+                diseasePrediction = "Possible Tachycardia detected.";
+            } else if (oxygenSaturation < 90) {
+                diseasePrediction = "Low Oxygen Saturation detected.";
+            } else if (bodyTemperature > 38) {
+                diseasePrediction = "Fever detected.";
+            }
+
+            // Display result
+            document.getElementById('diseaseResult').innerText = diseasePrediction;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleep Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+            color: #333;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+        h2 {
+            color: #6a0572;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        input, select {
+            background: #f4f4f4;
+            border: 1px solid #ccc;
+        }
+        button {
+            background: #6a0572;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s ease-in-out;
+        }
+        button:hover {
+            background: #a18cd1;
+        }
+        #start-sleep {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            font-size: 18px;
+            background-color: #ff4081;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s ease-in-out;
+            margin-bottom: 20px;
+        }
+        #start-sleep:hover {
+            background-color: #c2185b;
+        }
+        #chart-container {
+            width: 100%;
+            height: 300px;
+            margin-top: 20px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        ul li {
+            background: #fbc2eb;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Sleep Tracker</h2>
+        <button id="start-sleep">Start</button>
+        <p id="timer">Sleep Timer: 0h 0m 0s</p>
+        
+        <label>Set Sleep Goal (hours)</label>
+        <input type="number" id="sleep-goal" min="1" max="12" value="8">
+        
+        <label>Bedtime</label>
+        <input type="time" id="bedtime">
+        
+        <label>Wake-up Time</label>
+        <input type="time" id="wakeuptime">
+        
+        <label>Alarm Options</label>
+        <select id="alarm">
+            <option value="vibrate">Vibrate</option>
+            <option value="sound">Sound</option>
+            <option value="both">Both</option>
+        </select>
+        
+        <h3>Sleep Data (Last 7 Days)</h3>
+        <div id="chart-container">
+            <canvas id="sleepChart"></canvas>
+        </div>
+        
+        <h3>Health Tips for Better Sleep</h3>
+        <ul>
+            <li>Maintain a consistent sleep schedule.</li>
+            <li>Avoid caffeine before bedtime.</li>
+            <li>Keep your bedroom dark and quiet.</li>
+            <li>Limit screen time before sleep.</li>
+        </ul>
+    </div>
+    
+    <script>
+        let startTime, interval;
+        document.getElementById("start-sleep").addEventListener("click", function() {
+            if (!startTime) {
+                startTime = new Date();
+                interval = setInterval(updateTimer, 1000);
+                this.textContent = "Stop";
+            } else {
+                clearInterval(interval);
+                let sleepDuration = (new Date() - startTime) / 3600000;
+                sleepData.push(sleepDuration.toFixed(2));
+                sleepData.shift();
+                startTime = null;
+                this.textContent = "Start";
+                updateChart();
+                checkGoal(sleepDuration);
+            }
+        });
+        
+        function updateTimer() {
+            let elapsed = Math.floor((new Date() - startTime) / 1000);
+            let hours = Math.floor(elapsed / 3600);
+            let minutes = Math.floor((elapsed % 3600) / 60);
+            let seconds = elapsed % 60;
+            document.getElementById("timer").textContent = `Sleep Timer: ${hours}h ${minutes}m ${seconds}s`;
+        }
+        
+        function checkGoal(sleepDuration) {
+            let goal = document.getElementById("sleep-goal").value;
+            if (sleepDuration >= goal) {
+                alert("Congratulations! You've reached your sleep goal.");
+            }
+        }
+        
+        let sleepData = [7, 6.5, 8, 7.5, 6, 8, 7];
+        let ctx = document.getElementById('sleepChart').getContext('2d');
+        let sleepChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Hours Slept',
+                    data: sleepData,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        suggestedMax: 10
+                    }
+                }
+            }
+        });
+        
+        function updateChart() {
+            sleepChart.data.datasets[0].data = sleepData;
+            sleepChart.update();
+        }
+    </script>
+</body>
+</html>

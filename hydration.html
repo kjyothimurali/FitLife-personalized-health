@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hydration Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #e3f2fd;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .progress-container {
+            width: 100%;
+            background: #ddd;
+            border-radius: 20px;
+            margin-top: 20px;
+        }
+        .progress {
+            width: 0%;
+            height: 20px;
+            background: #2196F3;
+            border-radius: 20px;
+            transition: width 0.3s;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px;
+            margin: 5px;
+            border: none;
+            background: #2196F3;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #1976D2;
+        }
+        input {
+            width: 80px;
+            padding: 5px;
+            margin: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .chart-container {
+            margin-top: 20px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>Hydration Tracker</h2>
+        <p>Goal: <span id="goal">2000</span> ml</p>
+        <input type="number" id="goal-input" placeholder="Set goal" min="500" step="100">
+        <button onclick="setGoal()">Set Goal</button>
+        <p>Consumed: <span id="consumed">0</span> ml</p>
+        <input type="number" id="water-input" placeholder="Add water" min="50" step="50">
+        <button onclick="addCustomWater()">Add</button>
+        <div class="progress-container">
+            <div class="progress" id="progress-bar"></div>
+        </div>
+        <div class="buttons">
+            <button onclick="addWater(250)">+250ml</button>
+            <button onclick="addWater(500)">+500ml</button>
+            <button onclick="resetWater()">Reset</button>
+        </div>
+        <div class="chart-container">
+            <h3>Last 7 Days Consumption</h3>
+            <canvas id="waterChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        let goal = localStorage.getItem("waterGoal") ? parseInt(localStorage.getItem("waterGoal")) : 2000;
+        let consumed = localStorage.getItem("waterConsumed") ? parseInt(localStorage.getItem("waterConsumed")) : 0;
+        let waterHistory = JSON.parse(localStorage.getItem("waterHistory")) || Array(7).fill(0);
+        document.getElementById("goal").innerText = goal;
+        document.getElementById("consumed").innerText = consumed;
+        updateProgress();
+        updateChart();
+
+        function addWater(amount) {
+            consumed += amount;
+            if (consumed > goal) consumed = goal;
+            document.getElementById("consumed").innerText = consumed;
+            localStorage.setItem("waterConsumed", consumed);
+            updateProgress();
+        }
+        function addCustomWater() {
+            let customAmount = parseInt(document.getElementById("water-input").value);
+            if (customAmount && customAmount > 0) {
+                addWater(customAmount);
+            }
+        }
+
+        function resetWater() {
+            waterHistory.shift();
+            waterHistory.push(consumed);
+            localStorage.setItem("waterHistory", JSON.stringify(waterHistory));
+            consumed = 0;
+            document.getElementById("consumed").innerText = consumed;
+            localStorage.setItem("waterConsumed", consumed);
+            updateProgress();
+            updateChart();
+        }
+
+        function setGoal() {
+            let newGoal = document.getElementById("goal-input").value;
+            if (newGoal && newGoal >= 500) {
+                goal = parseInt(newGoal);
+                document.getElementById("goal").innerText = goal;
+                localStorage.setItem("waterGoal", goal);
+                updateProgress();
+            }
+        }
+
+        function updateProgress() {
+            let progress = (consumed / goal) * 100;
+            document.getElementById("progress-bar").style.width = progress + "%";
+        }
+
+        function updateChart() {
+            let ctx = document.getElementById("waterChart").getContext("2d");
+            new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Today"],
+                    datasets: [{
+                        label: "Water Consumed (ml)",
+                        data: waterHistory,
+                        backgroundColor: "#2196F3",
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

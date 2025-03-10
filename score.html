@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Health Tracker</title>
+   
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #121212;
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            transition: background 0.5s;
+        }
+        .container {
+            width: 90%;
+            max-width: 500px;
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 10px 30px rgba(255, 255, 255, 0.1);
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+        h1, h3 {
+            color: #ffffff;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #555;
+            border-radius: 6px;
+            background: #333;
+            color: white;
+            margin-top: 5px;
+        }
+        button {
+            background: #42a5f5;
+            color: white;
+            font-size: 18px;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
+            transition: background 0.3s, transform 0.2s;
+        }
+        button:hover {
+            background: #7e57c2;
+            transform: scale(1.05);
+        }
+        .progress {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: conic-gradient(#42a5f5 calc(var(--progress) * 1%), #444 calc(var(--progress) * 1%));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>find your score here</h1>
+        <form id="health-form">
+            <label for="age">Age:</label>
+            <input type="number" id="age" required>
+            <label for="weight">Weight (kg):</label>
+            <input type="number" id="weight" required>
+            <label for="height">Height (cm):</label>
+            <input type="number" id="height" required>
+            <label for="sleep">Sleep (hours/day):</label>
+            <input type="number" id="sleep" required>
+            <label for="water">Water Intake (liters/day):</label>
+            <input type="number" id="water" required>
+            <label for="exercise">Exercise (hours/week):</label>
+            <input type="number" id="exercise" required>
+            <button type="submit">Calculate Health Score</button>
+        </form>
+        <canvas id="gaugeChart" width="300" height="150"></canvas>
+        <div id="result" style="display: none;">
+            <div class="progress" id="progress" style="--progress: 0%;">0%</div>
+            <h2 id="health-score"></h2>
+            <p id="health-message"></p>
+            <h3>Suggestions:</h3>
+            <ul id="suggestions"></ul>
+        </div>
+    </div>
+    <script>
+        document.getElementById("health-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            let weight = parseFloat(document.getElementById("weight").value);
+            let height = parseFloat(document.getElementById("height").value);
+            let sleep = parseInt(document.getElementById("sleep").value);
+            let water = parseInt(document.getElementById("water").value);
+            let exercise = parseInt(document.getElementById("exercise").value);
+            let heightInMeters = height / 100;
+            let bmi = (weight / (heightInMeters * heightInMeters)).toFixed(2);
+            let healthScore = Math.min((bmi * 1.5) + (sleep * 2) + (water * 2) + (exercise * 4), 100);
+            document.getElementById("result").style.display = "block";
+            document.getElementById("health-score").innerText = `Health Score: ${healthScore.toFixed(1)}`;
+            document.getElementById("progress").style.setProperty("--progress", `${healthScore}%`);
+            document.getElementById("progress").innerText = `${Math.round(healthScore)}%`;
+            let suggestions = [];
+            if (bmi < 18.5) {
+                suggestions.push("Your BMI is low. Increase calorie intake with healthy foods.");
+            } else if (bmi > 25) {
+                suggestions.push("Your BMI is high. Consider a balanced diet and regular exercise.");
+            }
+            if (sleep < 7) {
+                suggestions.push("Try to get at least 7-8 hours of sleep for better health.");
+            }
+            if (water < 2) {
+                suggestions.push("Increase water intake to stay hydrated (at least 2 liters per day).");
+            }
+            if (exercise < 3) {
+                suggestions.push("Increase exercise to at least 3-5 hours per week for better fitness.");
+            }
+            let suggestionsList = document.getElementById("suggestions");
+            suggestionsList.innerHTML = "";
+            suggestions.forEach(suggestion => {
+                let li = document.createElement("li");
+                li.textContent = suggestion;
+                suggestionsList.appendChild(li);
+                
+            });
+        });
+    </script>
+</body>
+</html>
